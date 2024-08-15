@@ -2,15 +2,19 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Notes</title>
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <!-- Quill CSS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
     <!-- Quill JS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
@@ -18,110 +22,135 @@
     <style>
         /* Floating Action Button Styles */
         /* Floating Action Button (FAB) Styles */
-.fab {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #007bff;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #007bff;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.fab:hover {
-    background-color: #0056b3;
-}
+        .fab:hover {
+            background-color: #0056b3;
+        }
 
-/* FAB Options Styles */
-.fab-options {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    display: none;
-    flex-direction: column;
-}
+        /* FAB Options Styles */
+        .fab-options {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            display: none;
+            flex-direction: column;
+        }
 
-.fab-options .fab-option {
-    margin-bottom: 10px;
-    background-color: #007bff;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .fab-options .fab-option {
+            margin-bottom: 10px;
+            background-color: #007bff;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.fab-options .fab-option:hover {
-    background-color: #0056b3;
-}
+        .fab-options .fab-option:hover {
+            background-color: #0056b3;
+        }
 
-/* Container Styles */
-.container {
-    max-width: 1200px; /* Adjust this value to control the maximum width */
-    margin: 0 auto; /* Centers the container horizontally */
-}
-.page-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+        /* Container Styles */
+        .container {
+            max-width: 95%;
+            /* Adjust this value to control the maximum width */
+            margin: 0 auto;
+            /* Centers the container horizontally */
+        }
+
+        .pages-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: start;
+            gap: 10px;
+            padding: 5px;
         }
 
         .page-summary {
             border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 15px;
+            padding: 3px;
             background-color: #f9f9f9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s;
+            max-width: 250px;
+            /* Maximum width constraint */
+            min-width: 100px;
+            /* Minimum width constraint */
+            word-wrap: break-word;
+            /* Ensures long words are broken correctly */
+            overflow-wrap: break-word;
+            /* Ensures long words are broken correctly */
+            text-align: center;
+            position: relative;
+            cursor: pointer;
         }
-        
+
+        .page-link {
+            background-color: transparent;
+            border: none;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+        }
 
         .page-summary:hover {
-            transform: translateY(-5px);
+            transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         .page-summary h5 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: clamp(0.6rem, 1.5vw, 1rem);
             color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            pointer-events: none;
+            /* Prevents hovering from triggering events */
         }
 
-        .page-summary a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .page-link{
-            background-color: transparent;
-            border: none;
-        }
-        .page-summary a:hover {
-            color: #007bff;
-            text-decoration: underline;
+        .page-summary .full-name-tooltip {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 1000;
         }
 
-.view-full {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.view-full:hover {
-    text-decoration: underline;
-}
-
+        .page-summary:hover .full-name-tooltip {
+            display: block;
+        }
     </style>
 </head>
 
@@ -136,11 +165,11 @@
             alert.className = 'alert alert-success alert-dismissible fade show';
             alert.role = 'alert';
             alert.innerHTML = `
-                    {{ message|escapejs }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                `;
+                  {{ message|escapejs }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              `;
             alertContainer.appendChild(alert);
             {% endfor %}
             setTimeout(function () {
@@ -151,11 +180,6 @@
     {% endif %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">My Notes and Links</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
         <div class="ml-auto">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="button" onclick="location.href='/admin'">
                 Admin
@@ -164,72 +188,60 @@
     </nav>
 
     <div class="container mt-3">
-        <div id="pages-list" class="page-grid">
+        <div id="pages-list" class="pages-list">
             {% for page in pages %}
             <div class="page-summary">
                 <a href="{% url 'pageview' page.id %}" class="page-link">
-                    <h5><i class="fas fa-file-alt"></i>&nbsp;{{ page.name }}</h5>
+                    <h5 title="{{ page.name }}">
+                        <i class="fas fa-file-alt"></i>&nbsp;
+                        {{ page.name|truncatechars:50 }}
+                    </h5>
+                    {% if page.name|length > 50 %}
+                    <div class="full-name-tooltip">{{ page.name }}</div>
+                    {% endif %}
                 </a>
             </div>
             {% endfor %}
         </div>
-        
-        <!-- Full Content Modal -->
-        <div class="modal fade" id="fullContentModal" tabindex="-1" aria-labelledby="fullContentModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="fullContentModalLabel">Page Content</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="fullContent" style="max-height: 550px; overflow-y: auto;"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <!-- Modals -->
     <!-- Add Page Modal -->
-<div class="modal fade" id="addPageModal" tabindex="-1" aria-labelledby="addPageModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addPageModalLabel">Add Page</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addPageForm" action="{% url 'add_page' %}" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="pageName">Page Name</label>
-                        <input type="text" class="form-control" id="pageName" name="pageName"
-                            placeholder="Enter page name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pageContent">Page Content</label>
-                        <div id="pageContent" style="height: 300px;"></div> <!-- Increase height -->
-                        <input type="hidden" id="pageContentHidden" name="pageContent">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <div class="modal fade" id="addPageModal" tabindex="-1" aria-labelledby="addPageModalLabel" aria-hidden="true"
+        data-backdrop="static" data-keyboard="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPageModalLabel">Add Page</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPageForm" action="{% url 'add_page' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="pageName">Page Name</label>
+                            <input type="text" class="form-control" id="pageName" name="pageName"
+                                placeholder="Enter page name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="pageContent">Page Content</label>
+                            <div id="pageContent" style="height: 300px"></div>
+                            <!-- Increase height -->
+                            <input type="hidden" id="pageContentHidden" name="pageContent" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Add Link Modal -->
     <div class="modal fade" id="addLinkModal" tabindex="-1" aria-labelledby="addLinkModalLabel" aria-hidden="true">
@@ -247,17 +259,21 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="linkName">File Name</label>
-                            <input type="text" class="form-control" id="linkName" name="linkName" placeholder="Enter file name" required>
+                            <input type="text" class="form-control" id="linkName" name="linkName"
+                                placeholder="Enter file name" required />
                         </div>
                         <div class="form-group">
                             <label for="linkFile">Choose File:</label>
-                            <input type="file" class="form-control-file" id="linkFile" name="linkFile" accept=".txt, .html" required>
+                            <input type="file" class="form-control-file" id="linkFile" name="linkFile"
+                                accept=".txt, .html" required />
                         </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -268,8 +284,8 @@
         <i class="fas fa-plus"></i>
     </div>
     <div class="fab-options" id="fab-options">
-        <div class="fab-option" id="addPage"  title="Add Page">
-            <i class="fas fa-pen"></i>  
+        <div class="fab-option" id="addPage" title="Add Page">
+            <i class="fas fa-pen"></i>
         </div>
         <div class="fab-option" id="addLink" title="Add File">
             <i class="fas fa-file-alt"></i>
@@ -281,45 +297,87 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
-            var quill = new Quill('#pageContent', {
-                theme: 'snow',
+            var Font = Quill.import('formats/font');
+            // Allow only these fonts in the dropdown
+            Font.whitelist = ['roboto', 'open-sans', 'serif', 'monospace'];
+            Quill.register(Font, true);
+
+            var quill = new Quill("#pageContent", {
+                theme: "snow",
                 modules: {
                     toolbar: [
-                        [{ 'header': '1' }, { 'header': '2' }],
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link', 'image']
-                    ]
-                }
+                        // Font family
+                        [{ font: [] }],
+                        // Font size
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        // Headers
+                        [{ header: "1" }, { header: "2" }, { header: [3, 4, 5, 6, false] }],
+                        // Bold, italic, underline
+                        ["bold", "italic", "underline"],
+                        // Text color and background color
+                        [{ color: [] }, { background: [] }],
+                        // Lists
+                        [{ list: "ordered" }, { list: "bullet" }],
+                        // Superscript/Subscript
+                        [{ script: "sub" }, { script: "super" }],
+                        // Links and images
+                        ["link", "image"],
+                        // Alignments
+                        [{ align: [] }],
+                    ],
+                    keyboard: {
+                        bindings: {
+                            bold: {
+                                key: 'B',
+                                shortKey: true,
+                                handler: function (range, context) {
+                                    quill.format('bold', !context.format.bold);
+                                }
+                            },
+                            italic: {
+                                key: 'I',
+                                shortKey: true,
+                                handler: function (range, context) {
+                                    quill.format('italic', !context.format.italic);
+                                }
+                            },
+                            underline: {
+                                key: 'U',
+                                shortKey: true,
+                                handler: function (range, context) {
+                                    quill.format('underline', !context.format.underline);
+                                }
+                            }
+                        }
+                    },
+                },
             });
-           
-            $('.view-full').on('click', function (e) {
+            $(".view-full").on("click", function (e) {
                 e.preventDefault();
-                var content = decodeURIComponent($(this).data('content'));
-                $('#fullContent').html(content);
-                $('#fullContentModal').modal('show');
+                var content = decodeURIComponent($(this).data("content"));
+                $("#fullContent").html(content);
+                $("#fullContentModal").modal("show");
             });
 
-            $('#addPageForm').on('submit', function (e) {
-                $('#pageContentHidden').val(quill.root.innerHTML);
+            $("#addPageForm").on("submit", function (e) {
+                $("#pageContentHidden").val(quill.root.innerHTML);
             });
             // Floating Action Button Logic
-            $('#fab').on('click', function () {
-                $('#fab-options').toggle();
+            $("#fab").on("click", function () {
+                $("#fab-options").toggle();
             });
 
             // Modal Triggers
-            $('#addPage').on('click', function () {
-                $('#addPageModal').modal('show');
-                $('#fab-options').hide();  // Hide FAB options after opening modal
+            $("#addPage").on("click", function () {
+                $("#addPageModal").modal("show");
+                $("#fab-options").hide(); // Hide FAB options after opening modal
             });
 
-            $('#addLink').on('click', function () {
-                $('#addLinkModal').modal('show');
-                $('#fab-options').hide();  // Hide FAB options after opening modal
+            $("#addLink").on("click", function () {
+                $("#addLinkModal").modal("show");
+                $("#fab-options").hide(); // Hide FAB options after opening modal
             });
         });
-        
     </script>
 </body>
 
