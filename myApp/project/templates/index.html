@@ -121,10 +121,10 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .page-summary h5 {
+        .page-summary h4 {
             margin: 0;
-            font-size: clamp(0.6rem, 1.5vw, 1rem);
-            color: #333;
+            font-size: clamp(0.8rem, 1.7vw, 1.2rem);
+            color: blue;
             white-space: nowrap;
             /*overflow: hidden;*/
             text-overflow: ellipsis;
@@ -192,11 +192,11 @@
             {% for page in pages %}
             <div class="page-summary">
                 <a href="{% url 'pageview' page.id %}" class="page-link">
-                    <h5 title="{{ page.name }}">
+                    <h4 title="{{ page.name }}">
                         <i class="fas fa-file-alt"></i>&nbsp;
-                        {{ page.name|truncatechars:100 }}
-                    </h5>
-                    {% if page.name|length > 50 %}
+                        <strong>{{ page.name|truncatechars:150 }}</strong>
+                    </h4>
+                    {% if page.name|length > 150 %}
                     <div class="full-name-tooltip">{{ page.name }}</div>
                     {% endif %}
                 </a>
