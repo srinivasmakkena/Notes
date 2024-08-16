@@ -41,3 +41,16 @@ def add_file(request):
         return redirect('home')
 
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
+def edit_page(request, page_id):
+    page = get_object_or_404(Page, id=page_id)
+
+    if request.method == 'POST':
+        page.name = request.POST.get('pageName')
+        page.content = request.POST.get('pageContent')
+        page.save()
+        messages.success(request, 'Page updated successfully!')
+        return redirect('pageview', id=page.id)
+
+    return render(request, 'edit_page.html', {'page': page})
