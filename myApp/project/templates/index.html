@@ -94,7 +94,7 @@
             background-color: #f9f9f9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s;
-            max-width: 250px;
+            /*max-width: 250px;*/
             /* Maximum width constraint */
             min-width: 100px;
             /* Minimum width constraint */
@@ -126,7 +126,7 @@
             font-size: clamp(0.6rem, 1.5vw, 1rem);
             color: #333;
             white-space: nowrap;
-            overflow: hidden;
+            /*overflow: hidden;*/
             text-overflow: ellipsis;
             max-width: 100%;
             pointer-events: none;
@@ -194,7 +194,7 @@
                 <a href="{% url 'pageview' page.id %}" class="page-link">
                     <h5 title="{{ page.name }}">
                         <i class="fas fa-file-alt"></i>&nbsp;
-                        {{ page.name|truncatechars:50 }}
+                        {{ page.name|truncatechars:100 }}
                     </h5>
                     {% if page.name|length > 50 %}
                     <div class="full-name-tooltip">{{ page.name }}</div>
