@@ -188,28 +188,14 @@
     </nav>
 
     <div class="container mt-3">
-        <div id="pages-list" class="pages-list">
-            {% for page in pages %}
-            <div class="page-summary">
-                <a href="{% url 'pageview' page.id %}" class="page-link">
-                    <h4 title="{{ page.name }}">
-                        <i class="fas fa-file-alt"></i>&nbsp;
-                        <strong>{{ page.name|truncatechars:150 }}</strong>
-                    </h4>
-                    {% if page.name|length > 150 %}
-                    <div class="full-name-tooltip">{{ page.name }}</div>
-                    {% endif %}
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+        <!-- Include the pages_list.html template -->
+        {% include 'pages_list.html' %}
     </div>
-
     <!-- Modals -->
     <!-- Add Page Modal -->
     <div class="modal fade" id="addPageModal" tabindex="-1" aria-labelledby="addPageModalLabel" aria-hidden="true"
         data-backdrop="static" data-keyboard="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl" style="max-width: 90vw;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addPageModalLabel">Add Page</h5>
@@ -227,7 +213,7 @@
                         </div>
                         <div class="form-group">
                             <label for="pageContent">Page Content</label>
-                            <div id="pageContent" style="height: 300px"></div>
+                            <div id="pageContent" style="height: 65vh;"></div>
                             <!-- Increase height -->
                             <input type="hidden" id="pageContentHidden" name="pageContent" />
                         </div>
@@ -242,6 +228,33 @@
             </div>
         </div>
     </div>
+    <!-- Add Section Modal -->
+<div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="addSectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSectionModalLabel">Add Section</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addSectionForm" action="{% url 'create_section' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="sectionTitle">Section Title</label>
+                        <input type="text" class="form-control" id="sectionTitle" name="sectionTitle"
+                            placeholder="Enter section title" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Add Link Modal -->
     <div class="modal fade" id="addLinkModal" tabindex="-1" aria-labelledby="addLinkModalLabel" aria-hidden="true">
@@ -281,17 +294,19 @@
 
     <!-- Floating Action Button -->
     <div class="fab" id="fab">
-        <i class="fas fa-plus"></i>
+    <i class="fas fa-plus"></i>
+</div>
+<div class="fab-options" id="fab-options">
+    <div class="fab-option" id="addPage" title="Add Page">
+        <i class="fas fa-pen"></i>
     </div>
-    <div class="fab-options" id="fab-options">
-        <div class="fab-option" id="addPage" title="Add Page">
-            <i class="fas fa-pen"></i>
-        </div>
-        <div class="fab-option" id="addLink" title="Add File">
-            <i class="fas fa-file-alt"></i>
-        </div>
+    <div class="fab-option" id="addLink" title="Add File">
+        <i class="fas fa-file-alt"></i>
     </div>
-
+    <div class="fab-option" id="addSection" title="Add Section">
+        <i class="fas fa-folder-plus"></i> <!-- Icon for adding a section -->
+    </div>
+</div>
     <!-- jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -372,10 +387,36 @@
                 $("#addPageModal").modal("show");
                 $("#fab-options").hide(); // Hide FAB options after opening modal
             });
-
+            $("#addSection").on("click", function () {
+            $("#addSectionModal").modal("show");
+            $("#fab-options").hide(); // Hide FAB options after opening modal
+        });
             $("#addLink").on("click", function () {
                 $("#addLinkModal").modal("show");
                 $("#fab-options").hide(); // Hide FAB options after opening modal
+            });
+        });
+        $("#addSectionForm").on("submit", function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const url = form.attr('action');
+            const data = form.serialize();
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        // Reload the page to reflect the changes
+                        window.location.reload();
+                    } else {
+                        alert('Failed to create section.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
             });
         });
     </script>

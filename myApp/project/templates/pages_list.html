@@ -1,0 +1,175 @@
+<style>
+    .section-container {
+        margin-bottom: 10px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+        cursor: pointer; /* Make the title clickable */
+    }
+
+    .section-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .rename-section-form {
+        display: none; /* Hide the form by default */
+    }
+
+    .rename-section-form input {
+        width: 150px;
+        margin-right: 5px;
+    }
+
+    .pages-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 5px;
+        border-bottom: 0.5px solid #ccc;
+        min-height: 50px;
+    }
+
+    .dragging {
+        opacity: 0.5;
+        border: 2px dashed #007bff;
+    }
+
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #007bff;
+    }
+
+    .icon-button.delete {
+        color: #dc3545;
+    }
+</style>
+
+{% for section, pages in grouped_pages.items %}
+<div class="section-container">
+    {% if section.title %}
+    <div class="section-header">
+        <div class="section-title" onclick="toggleRenameForm('{{ section.id }}')">
+            {{ section.title }} 
+            <i style= "color:black; font-size: medium;"class="far fa-edit"></i>
+        </div>
+        <div class="section-actions">
+            <!-- Rename Section Form -->
+            <form id="rename-form-{{ section.id }}" class="rename-section-form" action="{% url 'rename_section' section.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="newTitle" placeholder="New Title" value="{{ section.title }}" required>
+                <button type="submit" class="icon-button"><i class="fas fa-check"></i></button>
+            </form>
+            <!-- Delete Section Button -->
+            <form class="delete-section-form" action="{% url 'delete_section' section.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="icon-button delete"><i class="fas fa-trash"></i></button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    <div class="pages-list" data-section-id="{{ section.id }}">
+        {% if not pages %}
+        <p style="color: #888; font-style: italic;">No files</p>
+        {% else %}
+        {% for page in pages %}
+        <div class="page-summary" draggable="true" data-page-id="{{ page.id }}">
+            <a href="{% url 'pageview' page.id %}" class="page-link">
+                <h4 title="{{ page.name }}">
+                    <i class="fas fa-file-alt"></i>&nbsp;
+                    <strong>{{ page.name|truncatechars:150 }}</strong>
+                </h4>
+                {% if page.name|length > 150 %}
+                <div class="full-name-tooltip">{{ page.name }}</div>
+                {% endif %}
+            </a>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log("Drag-and-drop script loaded!"); // Debugging
+
+        let draggedPage = null;
+
+        // Drag start event
+        $('.page-summary').on('dragstart', function (e) {
+            draggedPage = $(this);
+            draggedPage.addClass('dragging');
+            e.originalEvent.dataTransfer.setData('text/plain', $(this).data('page-id'));
+        });
+
+        // Drag end event
+        $('.page-summary').on('dragend', function () {
+            draggedPage.removeClass('dragging');
+            draggedPage = null;
+        });
+
+        // Drag over event for sections
+        $('.pages-list').on('dragover', function (e) {
+            e.preventDefault(); // Allow dropping
+            $(this).addClass('dragover');
+        });
+
+        // Drag leave event for sections
+        $('.pages-list').on('dragleave', function () {
+            $(this).removeClass('dragover');
+        });
+
+        // Drop event for sections
+        $('.pages-list').on('drop', function (e) {
+            e.preventDefault(); // Allow dropping
+            $(this).removeClass('dragover');
+
+            const pageId = e.originalEvent.dataTransfer.getData('text/plain');
+            const newSectionId = $(this).data('section-id');
+
+            // Send AJAX request to update the page's section
+            $.ajax({
+                url: "{% url 'update_page_section' %}",
+                method: 'POST',
+                data: {
+                    page_id: pageId,
+                    new_section_id: newSectionId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        window.location.reload();
+                    } else {
+                        alert('Failed to update section.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
+            });
+        });
+    });
+
+    // Function to toggle rename form visibility
+    function toggleRenameForm(sectionId) {
+        const renameForm = $(`#rename-form-${sectionId}`);
+        renameForm.toggle();
+    }
+</script>
